@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+
+
+        .sidenav {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #e9ecef;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #000000;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
+        }
+
+        #btn1{
+            font-size: 30px;
+            position: absolute;
+            right: 5%;
+            padding-top: 1px;
+        }
+
+       .btn-primary{
+           background-color: #ffffff;
+           border: #000000;
+       }
+    </style>
+</head>
+
+<body onload="closeNav()">
+<form action="" method="post">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" style="background-color: #f8f9fa; height: 50px">
+        <div class="container" style="font-weight: bolder">
+            <!--header-->
+            <div class="navbar-header">
+                <div class="navbar-brand" style="font-size: 20px;font-family: sans-seri">
+                    <a href="HomePage.html" style="color: #000000;text-decoration: none">Rye</a>
+                    <!-- dashboard-->
+                    <span class="navbar-toggler" id="btn1" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                   <div id="mySidenav" class="sidenav" style="z-index: 2;">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <a href="HomePage.html">Introduction</a>
+                    <a href="Map.html">Map</a>
+                    <a href="restaurant.html">Restaurant</a>
+                    <a href="Shop.html">Shop</a>
+                    <a href="Service.html">Service</a>
+                    <a href="Survey.html">Survey</a>
+                </div>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="py-5 text-center">
+            <h1>Welcome To The Rye!</h1>
+            <p class="lead">
+                please fill the survey below to help us to offer you a better service!</p>
+            <hr class="mb-4">
+        </div>
+
+        <div class="row" style="margin-left: 25%">
+            <div class="col-md-8 order-md-1">
+
+                <br>
+                <div class="mb-3">
+                    <div style="font-size: 2em;">How will you rate your trip to Rye?</div>
+                    <br>
+                    <div class="btn-group btn-group-lg" data-toggle="buttons">
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/smile.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/soso.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/bad.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                    </div>
+
+                </div>
+                <br>
+                <div class="mb-3">
+                    <div style="font-size: 2em;">Do you think our website helped you to enjoy the trip?</div>
+                    <br>
+                    <div class="btn-group btn-group-lg" data-toggle="buttons">
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/smile.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/soso.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/bad.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                    </div>
+
+                </div>
+                <br>
+                <div class="mb-3">
+                    <div style="font-size: 2em;">If the route is accurate?</div>
+                    <br>
+                    <div class="btn-group btn-group-lg" data-toggle="buttons">
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/smile.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/soso.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/bad.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                    </div>
+
+                </div>
+                <br>
+                <div class="mb-3">
+                    <div style="font-size: 2em;">Will you recommend our website to your friends?</div>
+                    <br>
+                    <div class="btn-group btn-group-lg" data-toggle="buttons">
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/smile.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/soso.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                        <label class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" style="background: url(images/bad.jpg) no-repeat center red;width: 110px;height:100px"></button>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <hr class="mb-4">
+        <button type="button" class="btn btn-lg btn-primary" style="text-decoration: none;background-color: #337ab7;width: 35%;margin-left: 32.5%">Sumbit</button>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<!-- 包括所有已编译的插件 -->
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+</body>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+</script>
+</html>

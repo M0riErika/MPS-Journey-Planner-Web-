@@ -1,0 +1,826 @@
+<html>
+<head>
+    <title>Rye Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../css/nav-bar.css">
+    <!--<link rel="stylesheet" href="../css/font-awesome.min.css">-->
+    <script src="https://code.jquery.com/jquery-1.11.3.js" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4OZzcBn6gWeDnNkkA5BaANPv3SR2hor0&libraries=places&callback=initMap"
+            async defer></script>
+    <!--       <script src="../js/testSurvey.js" type="text/javascript"></script>-->
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a {
+            text-decoration: none;
+            background-color: transparent;
+        }
+        img{
+
+            height:600px;
+            width: 958px;
+        }
+        /* The side navigation menu */
+        .sidenav {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #e9ecef;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+     /* The navigation menu links */
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+         /* When you mouse over the navigation links, change their color */
+        .sidenav a:hover {
+            color: #000000;
+        }
+     /* Position and style the close button (top right corner) */
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+       /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
+        }
+
+        #btn1{
+            font-size: 30px;
+            position: absolute;
+            right: 5%;
+            padding-top: 1px;
+        }
+
+        #map {
+            height: 100%;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .controls {
+
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        #origin-input,
+        #destination-input,
+        #date-input{
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 200px;
+            margin-top: 10px;
+        }
+        #origin-input:focus,
+        #destination-input:focus,
+        #date-input:focus{
+            border-color: #4d90fe;
+        }
+        #mode-selector {
+            color: #fff;
+            background-color: #4d90fe;
+            margin-left: 12px;
+            padding: 5px 11px 0px 11px;}
+        #mode-selector label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        #info {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        #info.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        #testSurvey {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        #testSurvey.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5;
+            animation: fadein 0.5s;
+        }
+
+        @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+
+    </style>
+
+    <script>
+
+        var mapObj;
+        var bins,carPark,BBQ,toilets,events,survey;
+        var origin,destination,date;
+        var x = [];
+        var popUp;
+        var binS = [];
+        var parkS = [];
+        var BBQS = [];
+        var toiletS = [];
+        var eventS = [];
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                mapTypeControl: false,
+                center: {lat:-38.3802,lng:144.8381},
+                zoom: 13
+            });
+            mapObj = map
+            var trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+            new AutocompleteDirectionsHandler(map);
+            var ryePosition = {lat:-38.3802,lng:144.8381};
+            var marker = new google.maps.Marker({
+                position:{lat:-38.3802,lng:144.8381},
+                map:map,
+            });
+            var contentString = '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h1 id="firstHeading" class="firstHeading">Rye</h1>'+
+                '<div id="bodyContent">'+
+                '<p><b>Rye</b>, is a seaside resort town, approximately 83 km south of <b>Melbourne</b>, <b>Victoria</b>, <b>Australia</b>, on the Mornington Peninsula. Its bay beach is popular with swimmers, fishermen, yachtsmen, and kitesurfers. Its ocean beach (which is not patrolled) is also popular with surfers.Its local government area is the Shire of Mornington Peninsula.</p>'+
+                '<p>Attribution: Rye, <a href="https://en.wikipedia.org/w/index.php?title=Rye">'+
+                'https://en.wikipedia.org/w/index.php?title=Rye</a> '+
+                '</p>'+
+                '</div>'+
+                '</div>';
+            var infowindow2 = new google.maps.InfoWindow({
+                content: contentString
+            });
+            marker.addListener('click', function() {
+                infowindow2.open(map, marker);
+            });
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                        var pos ={
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        }
+                        map.setCenter(pos);
+                        var marker2= new google.maps.Marker({
+                            position:pos,
+                            map:map,
+                            title:'your location'
+                        });
+                    }
+
+                    , function() {
+                        handleLocationError(true, infowindow2, map.getCenter());
+                    });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infowindow2, map.getCenter());
+            }
+        } //Initialize Google map
+        //API's JSON data received
+        $.ajax({
+            url:'https://journey-planner-api.azurewebsites.net/api/getBins?coordinates=1,2',
+            contentType:'application/json;charset=UTF-8',
+            method:'get',
+            Type:'json',
+            success:function(binsData){
+                bins = binsData;
+
+            },
+        });
+        $.ajax({
+            url:'https://journey-planner-api.azurewebsites.net/api/getParking?coordinates=1,2',
+            contentType:'application/json;charset=UTF-8',
+            method:'get',
+            Type:'json',
+            success:function(carParkData){
+                carPark = carParkData;
+            },
+        });
+        $.ajax({
+            url:'https://journey-planner-api.azurewebsites.net/api/getBBQs?coordinates=1,2',
+            contentType:'application/json;charset=UTF-8',
+            method:'get',
+            Type:'json',
+            success:function(BBQData){
+                BBQ = BBQData;
+            },
+        });
+        $.ajax({
+            url:'https://journey-planner-api.azurewebsites.net/api/getToilets?coordinates=1,2',
+            contentType:'application/json;charset=UTF-8',
+            method:'get',
+            Type:'json',
+            success:function(toiletData){
+                toilets = toiletData;
+            },
+        });
+        $.ajax({
+            url:'https://journey-planner-api.azurewebsites.net/api/getEvents?coordinates=1,2',
+            contentType:'application/json;charset=UTF-8',
+            method:'get',
+            Type:'json',
+            success:function(eventsData){
+                events = eventsData;
+            },
+        });
+        $.ajax({
+            url:'',
+            contentType:'application/json;charset=UTF-8',
+            method:'get',
+            Type:'json',
+            success:function(surveyData){
+                survey = surveyData;
+            },
+        });
+
+
+        function AutocompleteDirectionsHandler(map) {
+            this.map = map;
+            this.originPlaceId = null;
+            this.destinationPlaceId = null;
+            this.travelMode = 'WALKING';
+            this.directionsService = new google.maps.DirectionsService;
+            this.directionsRenderer = new google.maps.DirectionsRenderer;
+            this.directionsRenderer.setMap(map);
+
+            var originInput = document.getElementById('origin-input');
+            var destinationInput = document.getElementById('destination-input');
+            var modeSelector = document.getElementById('mode-selector');
+            var dateInput = document.getElementById('date-input');
+            var originAutocomplete = new google.maps.places.Autocomplete(originInput);
+
+
+            // Specify just the place data fields that you need.
+            originAutocomplete.setFields(['place_id']);
+
+            var destinationAutocomplete =
+                new google.maps.places.Autocomplete(destinationInput);
+            // Specify just the place data fields that you need.
+            destinationAutocomplete.setFields(['place_id']);
+
+            this.setupClickListener('changemode-walking', 'WALKING');
+            this.setupClickListener('changemode-transit', 'TRANSIT');
+            this.setupClickListener('changemode-driving', 'DRIVING');
+
+            this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+            this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+            this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(dateInput);
+            this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(originInput);
+            this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(
+                destinationInput);
+            this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(modeSelector);
+
+        }
+
+        function showOption(){
+            var binsData= bins;
+            var carParkData = carPark;
+            var BBQData = BBQ;
+            var toiletData = toilets;
+            var eventsData = events;
+            var opsel = $('#optionSel option:selected').val();
+            var a,b,c,i,j;
+            if (''==opsel) {
+                for (i in binS) {
+                    binS[i].setMap(null);
+                }
+                for (a in parkS){
+                    parkS[a].setMap(null);
+                }
+                for (b in BBQS) {
+                    BBQS[b].setMap(null);
+                }
+                for (c in toiletS) {
+                    toiletS[c].setMap(null);
+                }
+                for (j in eventS) {
+                    eventS[j].setMap(null);
+                }
+                return;
+            }//Delete all markers.
+
+            if ("Bin"== opsel) {
+                for (a in parkS){
+                    parkS[a].setMap(null);
+                }
+                for (b in BBQS) {
+                    BBQS[b].setMap(null);
+                }
+                for (c in toiletS) {
+                    toiletS[c].setMap(null);
+                }
+                for (j in eventS) {
+                    eventS[j].setMap(null);
+                }
+                var bin = [];
+                for (i = 0; i < binsData.data.length; i++) {
+                    bin[i] = new google.maps.Marker({
+                        position: new google.maps.LatLng(
+                            binsData.data[i].coordinates.latitude,
+                            binsData.data[i].coordinates.longitude),
+                        map: mapObj,
+                        title: 'Type: ' + binsData.data[i].garbageType + '\nFill level: ' + binsData.data[i].currentFillLevel,
+                        icon:'images/Bin.png'
+                    });
+                    binS.push(bin[i]);
+
+                    bin[i].addListener('click', function(){
+                        document.getElementById('info').innerHTML = this.title;
+                        x[i] = document.getElementById('info');
+                        x[i].className = 'show';
+                        setTimeout(function(){
+                            x[i].className = x[i].className.replace('show','');
+                        },3000)
+                    });
+                }   //get bins location and add bottom bar for every marker
+                mapObj.setCenter(new google.maps.LatLng(-38.369239,144.821912));
+                mapObj.setZoom(15);
+                return;
+
+            }  //show 'bin' markers
+
+            if ("CarPark"==opsel){
+                for (i in binS) {
+                    binS[i].setMap(null);
+                }
+                for (b in BBQS) {
+                    BBQS[b].setMap(null);
+                }
+                for (c in toiletS) {
+                    toiletS[c].setMap(null);
+                }
+                for (j in eventS) {
+                    eventS[j].setMap(null);
+                }
+                var park = [];
+                for (a = 0; a < carParkData.data.length; a++) {
+                    var totalSpaces = [];
+                    totalSpaces = JSON.stringify(carParkData.data[a].totalSpaces).replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\"|\'|\,|\<|\.|\>|\/|\?]/g,"");
+                    park[a] = new google.maps.Marker({
+                        position: new google.maps.LatLng(
+                            carParkData.data[a].coordinates.latitude,
+                            carParkData.data[a].coordinates.longitude),
+                        map: mapObj,
+                        title: 'Total Space: ' + totalSpaces,
+                        icon:'images/Parking.png'
+                    });
+                    parkS.push(park[a]);
+
+                    park[a].addListener('click', function(){
+                        document.getElementById('info').innerHTML = this.title;
+                        x[a] = document.getElementById('info');
+                        x[a].className = 'show';
+                        setTimeout(function(){
+                            x[a].className = x[a].className.replace('show','');
+                        },3000)
+                    });
+                }
+
+                mapObj.setCenter(new google.maps.LatLng(-38.369543,144.822237));
+                mapObj.setZoom(15);
+                return;
+            }
+
+            if ("BBQ"== opsel) {
+                for (a in parkS){
+                    parkS[a].setMap(null);
+                }
+                for (i in binS) {
+                    binS[i].setMap(null);
+                }
+                for (c in toiletS) {
+                    toiletS[c].setMap(null);
+                }
+                for (j in eventS) {
+                    eventS[j].setMap(null);
+                }
+                var bbq = [];
+                for (b = 0; b < BBQData.data.length;b++) {
+                    bbq[b] = new google.maps.Marker({
+                        position: new google.maps.LatLng(
+                            BBQData.data[b].coordinates.latitude,
+                            BBQData.data[b].coordinates.longitude),
+                        map: mapObj,
+                        title: 'Total hotplates: ' + BBQData.data[b].totalHotplates + ', Hotplates in use: ' + BBQData.data[b].hotplatesInUse,
+                        icon:'images/BBQ.png'
+                    });
+                    BBQS.push(bbq[b]);
+
+                    bbq[b].addListener('click', function(){
+                        document.getElementById('info').innerHTML = this.title;
+                        x[b] = document.getElementById('info');
+                        x[b].className = 'show';
+                        setTimeout(function(){
+                            x[b].className = x[b].className.replace('show','');
+                        },3000)
+                    });
+                }
+
+                mapObj.setCenter(new google.maps.LatLng(-38.369995,144.822619));
+                mapObj.setZoom(15);
+                return;
+            }
+
+            if ("Toilet"== opsel) {
+                for (a in parkS){
+                    parkS[a].setMap(null);
+                }
+                for (b in BBQS) {
+                    BBQS[b].setMap(null);
+                }
+                for (i in binS) {
+                    binS[i].setMap(null);
+                }
+                for (j in eventS) {
+                    eventS[j].setMap(null);
+                }
+                var toilet = [];
+                for (c = 0; c < toiletData.data.length;c++) {
+                    var type = [];
+                    type = JSON.stringify(toiletData.data[c].type).replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\"|\'|\<|\.|\>|\/|\?]/g,"");
+                    toilet[c] = new google.maps.Marker({
+                        position: new google.maps.LatLng(
+                            toiletData.data[c].coordinates.latitude,
+                            toiletData.data[c].coordinates.longitude),
+                        map: mapObj,
+                        title: 'Type: ' + type,
+                        icon:'images/Toilets.png'
+                    });
+                    toiletS.push(toilet[c]);
+                    toilet[c].addListener('click', function(){
+                        document.getElementById('info').innerHTML = this.title;
+                        x[c] = document.getElementById('info');
+                        x[c].className = 'show';
+                        setTimeout(function(){
+                            x[c].className = x[c].className.replace('show','');
+                        },3000)
+                    });
+                }
+
+                mapObj.setCenter(new google.maps.LatLng(-38.36993,144.822824));
+                mapObj.setZoom(15);
+                return;
+            }
+
+            if ("Events"== opsel) {
+                for (a in parkS){
+                    parkS[a].setMap(null);
+                }
+                for (b in BBQS) {
+                    BBQS[b].setMap(null);
+                }
+                for (c in toiletS) {
+                    toiletS[c].setMap(null);
+                }
+                for (i in binS) {
+                    binS[i].setMap(null);
+                }
+                var event = [];
+                for (j = 0; j < eventsData.data.length; j++) {
+                    var eventIcon;
+                    if(eventsData.data[j].eventType == 'private'){
+                        eventIcon = 'images/private.png';
+                    }
+                    if(eventsData.data[j].eventType == 'wedding'){
+                        eventIcon = 'images/wedding.png';
+                    }
+                    if(eventsData.data[j].eventType == 'swimming'){
+                        eventIcon = 'images/swim.png';
+                    }
+                    if(eventsData.data[j].eventType == 'festival'){
+                        eventIcon = 'images/festival.png';
+                    }
+                    if(eventsData.data[j].eventType == 'filming'){
+                        eventIcon = 'images/film.png';
+                    }
+                    event[j] = new google.maps.Marker({
+                        position: new google.maps.LatLng(
+                            eventsData.data[j].coordinates.latitude,
+                            eventsData.data[j].coordinates.longitude),
+                        map: mapObj,
+                        title: 'Title: ' + eventsData.data[j].title + '\nStart date: ' + eventsData.data[j].startDate + '\nEnd date: ' + eventsData.data[j].endDate + '\nStart time: ' + eventsData.data[j].startTime + '\nEnd time: ' + eventsData.data[j].endTime,
+                        icon:eventIcon
+                    });
+                    eventS.push(event[j]);
+                    event[j].addListener('click', function(){
+                        document.getElementById('info').innerHTML = this.title;
+                        x[j] = document.getElementById('info');
+                        x[j].className = 'show';
+                        setTimeout(function(){
+                            x[j].className = x[j].className.replace('show','');
+                        },3000)
+                    });
+                }
+
+                mapObj.setCenter(new google.maps.LatLng(-38.369815,144.823255));
+                mapObj.setZoom(15);
+                return;
+            } //All same as "Bin" part
+            return;
+        } //Set different types of markers in the map.
+
+        // Sets a listener on a radio button to change the filter type on Places
+        // Autocomplete.
+        AutocompleteDirectionsHandler.prototype.setupClickListener = function(
+            id, mode) {
+            var radioButton = document.getElementById(id);
+            var me = this;
+
+            radioButton.addEventListener('click', function() {
+                me.travelMode = mode;
+                me.route();
+            });
+        };
+
+        AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
+            autocomplete, mode) {
+            var me = this;
+            autocomplete.bindTo('bounds', this.map);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+
+                if (!place.place_id) {
+                    window.alert('Please select an option from the dropdown list.');
+                    return;
+                }
+                if (mode === 'ORIG') {
+                    me.originPlaceId = place.place_id;
+                } else {
+                    me.destinationPlaceId = place.place_id;
+                }
+                me.route();
+            });
+        };
+
+        AutocompleteDirectionsHandler.prototype.route = function() {
+            if (!this.originPlaceId || !this.destinationPlaceId) {
+                return;
+            }
+            var me = this;
+
+            this.directionsService.route(
+                {
+                    origin: {'placeId': this.originPlaceId},
+                    destination: {'placeId': this.destinationPlaceId},
+                    travelMode: this.travelMode
+                },
+                function(response, status) {
+                    if (status === 'OK') {
+                        me.directionsRenderer.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+        };
+
+        function saveInfo(){
+            origin = document.getElementById('origin-input').value;
+            destination = document.getElementById('destination-input').value;
+            date = document.getElementById('date-input').value;
+
+            localStorage.setItem('origin',origin);
+            localStorage.setItem('destination',destination);
+            localStorage.setItem('date',date);
+        } //Save infomation into localStorage
+        function jumpOutSurvey1(){
+            var now = new Date();
+            var minute =  now.getMinutes();
+            var hour =  now.getHours();
+            var day = now.getDate();
+            var month = now.getMonth()+1;
+            console.log(month,day);
+
+            var time = localStorage.getItem('date',date);
+            console.log(time);
+            var timeYear = parseInt(time.substring(0,4));
+            var timeMonth = parseInt(time.substring(5,7));
+            var timeDate =  parseInt(time.substring(8,10));
+            var timeHour =  parseInt(time.substring(11,13));
+            var timeMinute =  parseInt(time.substring(14,16));
+            console.log(timeMonth,timeDate);
+            if(month == timeMonth){
+                if(day - timeDate == 1 && hour >= timeHour && minute >= timeMinute){
+                    location.href = '../Survey.html';
+                }
+                if(hour-timeHour >= 5){
+                    location.href = '../Survey.html';
+                }
+               }
+        }
+
+        function jumpOutSurvey2(){
+            var now = new Date();
+            var minute =  now.getMinutes();
+            var hour =  now.getHours();
+            var day = now.getDate();
+            var month = now.getMonth()+1;
+            console.log(month,day);
+
+            var time = localStorage.getItem('date',date);
+            console.log(time);
+            var timeYear = parseInt(time.substring(0,4));
+            var timeMonth = parseInt(time.substring(5,7));
+            var timeDate =  parseInt(time.substring(8,10));
+            var timeHour =  parseInt(time.substring(11,13));
+            var timeMinute =  parseInt(time.substring(14,16));
+            console.log(timeMonth,timeDate);
+            if(month == timeMonth){
+                if(day - timeDate == 1 && hour >= timeHour && minute >= timeMinute){
+                    location.href = '../Survey.html';
+                }
+                if(day-timeDate>1){
+                    location.href = '../Survey.html';
+                }
+                localStorage.removeItem('date');
+                localStorage.removeItem('origin');
+                localStorage.removeItem('destination')            }
+            if(month > timeMonth){
+                location.href = '../website/Survey.html';
+                localStorage.removeItem('date');
+                localStorage.removeItem('origin');
+                localStorage.removeItem('destination')            }
+        } //Pop up a survey after at least one day.
+
+        function testSurvey(){
+            setTimeout(function(){
+                location.href = 'Survey.html';
+            },3000)
+        };
+
+    </script>
+</head>
+<body onload = 'jumpOutSurvey1();closeNav();'>
+<div style="display: none">
+    <input id="origin-input" class="controls" type="text"
+           placeholder="Enter an origin location">
+    <br/><br/>
+    <input id="destination-input" class="controls" type="text"
+           placeholder="Enter a destination location">
+    <input id="date-input" class="controls" type="datetime-local"
+           placeholder="Enter your date">
+           <script type="text/javascript">
+               if(localStorage.getItem('origin',origin) != null){
+                    document.getElementById('origin-input').value = localStorage.getItem('origin',origin);
+                }
+            if(localStorage.getItem('destination',destination) != null){
+                    document.getElementById('destination-input').value = localStorage.getItem('destination',destination);
+                }
+            if(localStorage.getItem('date',date) != null){
+                    document.getElementById('date-input').value = localStorage.getItem('date',date);
+                }
+           </script>
+    <div id="mode-selector" class="controls">
+        <input type="radio" name="type" id="changemode-walking" checked="checked">
+        <label for="changemode-walking">Walking</label>
+
+        <input type="radio" name="type" id="changemode-transit">
+        <label for="changemode-transit">Transit</label>
+
+        <input type="radio" name="type" id="changemode-driving">
+        <label for="changemode-driving">Driving</label>
+
+        <select id="optionSel" onchange="showOption()">
+            <option value="">please select</option>
+            <option value="Bin">Bin</option>
+            <option value="CarPark">CarPark</option>
+            <option value="BBQ">BBQ</option>
+            <option value="Toilet">Toilet</option>
+            <option value="Events">Events</option>
+        </select>
+        <button id="button" class="controls"  onclick = 'saveInfo(),testSurvey()'>Submit</button>
+
+    </div>
+
+</div>
+<div class="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" style="background-color: #f8f9fa; height: 50px">
+        <div class="container">
+            <!--header-->
+            <div class="navbar-header">
+                <div class="navbar-brand" style="font-size: 20px;font-family: sans-seri">
+                    <a href="HomePage.html" style="color: #000000;text-decoration: none">Rye</a>
+                    <!-- dashboard-->
+                    <span class="navbar-toggler" id="btn1" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                    <div id="mySidenav" class="sidenav" style="z-index: 2;">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                        <a href="HomePage.html">AboutRye</a>
+                        <a href="Map.html">Map</a>
+                        <a href="restaurant.html">Restaurant</a>
+                        <a href="Shop.html">Shop</a>
+                        <a href="Service.html">Service</a>
+                        <a href="Survey.html">Survey</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+    <div id="map"></div>
+</div>
+<div id= 'info'></div>
+<div id="myModal" class="modal">
+    <div class="modal-content" id = 'testSurvey'>
+        <div class="modal-header"style="font-size: 30px">Survey
+            <span id="closeBtn" class="close">×</span>
+        </div>
+        <!-- <div class="modal-body">
+            <p>Thursday 10am–7:30pm </p>
+            <p>Friday 10am–9pm</p>
+            <p>Saturday 10am–8pm</p>
+            <p>Sunday 10am–7pm</p>
+            <p>Monday 12–7pm</p>
+            <p>Tuesday Closed</p>
+            <p>Wednesday 10am–7pm</p>
+        </div> -->
+    </div>
+</div>
+</body>
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+</script>
+</html>

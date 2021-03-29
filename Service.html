@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"name="viewport" content="width=device-width, initial-scale=1">
+    <title>Service</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #e9ecef;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #000000;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        #btn1{
+            font-size: 30px;
+            position: absolute;
+            right: 5%;
+            padding-top: 1px;
+        }
+
+
+
+    </style>
+</head>
+<body onload="closeNav()">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded" style="background-color: #f8f9fa; height: 50px;">
+    <div class="container">
+        <!--header-->
+        <div class="navbar-header">
+            <div class="navbar-brand" style="font-size: 20px;font-family: sans-seri">
+                <a href="HomePage.html" style="color: #000000;text-decoration: none">Rye</a>
+                <!-- dashboard-->
+                <span class="navbar-toggler" id="btn1" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                <div id="mySidenav" class="sidenav" style="z-index: 2;">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <a href="HomePage.html">Introduction</a>
+                    <a href="Map.html">Map</a>
+                    <a href="restaurant.html">Restaurant</a>
+                    <a href="Shop.html">Shop</a>
+                    <a href="Service.html">Service</a>
+                    <a href="Survey.html">Survey</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<div class="col-12" style="text-align: center;">
+    <div style="text-align: center;z-index:1;font-family: sans-seri">
+        <h1 class="display-4 font-weight-normal">Service</h1>
+        <p class="lead font-weight-normal">Visitor Information Centers & Local Council</p>
+    </div>
+</div>
+<div class="row">
+
+</div>
+<hr style="width: 80%;margin-left: 10%">
+<div class="container" style="margin-top: 6%;background-color: #e9ecef;font-family: sans-seri">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Sorrento Beachside Visitor Information Centre</h2>
+            <p>(8 km away)<br>
+                38 Ocean Beach Road, Sorrento<br>
+                Phone: (03) 5984 1478<br>
+                Email: info@sorrentobeachsidetourism.com.au</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Mornington Peninsula Visitor Information Centre</h2>
+            <p>(14 km away)<br>
+                359B Point Nepean Road, Dromana<br>
+                Phone: (03) 5950 1579 (Free call: 1800 804 009)<br>
+                Email: info@tourism.mornpen.vic.gov.au<br></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Mornington Peninsula Shire</h2>
+            <p>Phone: 1300 850 600<br>
+                Website: www.mornpen.vic.gov.au</p>
+        </div>
+    </div>
+
+</div>
+<!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
+<script src="https://code.jquery.com/jquery.js"></script>
+<!-- 包括所有已编译的插件 -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+</script>
+</html>

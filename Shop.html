@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+
+
+        .sidenav {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #e9ecef;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #000000;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
+        }
+
+        #btn1{
+            font-size: 30px;
+            position: absolute;
+            right: 5%;
+            padding-top: 1px;
+        }
+
+        .restaurant{
+            text-align: center;
+            max-height: 255px;
+            border: solid 1px rgb(230,230,230);
+            border-radius: 5px 5px 5px 5px ;
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+
+        .restaurant p{
+            text-align: center;
+            font-size: 0.9em;
+            background-color: #e9ecef;
+            color: #000000;
+            padding: 2px 0 2px 0;
+            margin-right: 10px;
+        }
+
+        .restaurant ul{
+            padding-left: 10px;
+        }
+
+        .panel .restaurant:hover{
+            box-shadow: 2px 2px 5px rgba(50, 50, 50, 0.75)
+        }
+
+    </style>
+</head>
+<body onload="closeNav()">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded" style="background-color: #f8f9fa; height: 50px">
+    <div class="container">
+        <!--header-->
+        <div class="navbar-header">
+            <div class="navbar-brand" style="font-size: 20px; font-family: sans-seri">
+                <a href="HomePage.html" style="color: #000000;text-decoration: none">Rye</a>
+                <!-- dashboard-->
+                <span class="navbar-toggler" id="btn1" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                <div id="mySidenav" class="sidenav" style="z-index: 2;">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <a href="HomePage.html">Introduction</a>
+                    <a href="Map.html">Map</a>
+                    <a href="restaurant.html">Restaurant</a>
+                    <a href="Shop.html">Shop</a>
+                    <a href="Service.html">Service</a>
+                    <a href="Survey.html">Survey</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<div class="col-12" style="text-align: center;position: relative;">
+    <div style="text-align: center;z-index:1;font-family: sans-seri">
+        <h1 class="display-4 font-weight-normal">Shop</h1>
+        <p class="lead font-weight-normal">Shops that suggested to you</p>
+    </div>
+</div>
+<hr style="width: 80%;margin-left: 10%">
+<div class="container" style="font-family: sans-seri">
+    <!--content-->
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="restaurant">
+                    <h5>Rip Curl Rye Outlet</h5>
+                    <img style="width: 195px;height: 80px" src="images/rip.jpeg"/>
+                    <ul style="list-style-type: none">
+                        <li>Address: Rye VIC 3941</li>
+                        <li>Website: ripcurl.com.au</li>
+                        <li>Phone: (03) 5985 4637</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="restaurant">
+                    <h5>Opportunity shop</h5>
+                    <img style="width: 195px;height: 80px" src="images/op.jpeg"/>
+                    <ul style="list-style-type: none">
+                        <li>Address: 2141 Point Nepean Rd Rye VIC 3941</li>
+                        <li>Website : ryeopportunityshop.org.au</li>
+                        <li>Phone: (03) 5985 2479</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="restaurant">
+                    <h5>Rye Health Storep</h5>
+                    <img style="width: 195px;height: 80px"src="images/health.jpeg"/>
+                    <ul style="list-style-type: none">
+                        <li>Address: 2185 Point Nepean Rd Rye VIC 3941</li>
+                        <li>Website: ryehealth.com.au</li>
+                        <li>Phone: (03) 5985 4887</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
+<script src="https://code.jquery.com/jquery.js"></script>
+<!-- 包括所有已编译的插件 -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+</script>
+</html>
